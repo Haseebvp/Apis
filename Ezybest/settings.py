@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Category',
     'Users',
     'Shop',
+    'Location',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -76,6 +77,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
     )
+    
 }
 
 WSGI_APPLICATION = 'Ezybest.wsgi.application'

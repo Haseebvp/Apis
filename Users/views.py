@@ -2,7 +2,7 @@ from django.shortcuts import render
 import requests
 from rest_framework import status
 from Users.models import *
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, Http404
 from Users.serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -22,7 +22,7 @@ class UserDetails(CustomView):
     def get_object(self, pk):
         try:
             return AuthUser.objects.get(pk=pk)
-        except Snippet.DoesNotExist:
+        except AuthUser.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
@@ -30,15 +30,22 @@ class UserDetails(CustomView):
         serializer = UserSerializer(user)
         return self.send_response(1, {'data': serializer.data})
 
-    def put(self, request, pk, format=None):
-        print request.data
+    def post(self, request, pk, format=None):
+        print "DATA : ",request.data
+        # pdb.set_trace()
         user = self.get_object(pk)
+        # pdb.set_trace()
         print user
         serializer = UserSerializer(user, data=request.data, partial=True)
+        # pdb.set_trace()
         if serializer.is_valid():
+            query = serializer.validated_data
+            # pdb.set_trace()
             serializer.save()
-            return self.send_response(1, {'phonenumber': request.data['phonenumber']})
+            # pdb.set_trace()
+            return self.send_response(1, {'phonenumber': query['phonenumber']})
         print serializer.errors
+        # pdb.set_trace()
         return self.send_response(0, {'error': serializer.errors})
 
     def delete(self, request, pk, format=None):
