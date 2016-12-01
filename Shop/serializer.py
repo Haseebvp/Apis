@@ -6,7 +6,18 @@ from Shop.models import *
 class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopTable
-        fields = ('id', 'name')
+        fields = '__all__'
+
+
+class LoginUserSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=30)
+    password = serializers.CharField(max_length=30)
+
+
+class QuerySerializer(serializers.Serializer):
+    category = serializers.CharField(max_length=30)
+    query = serializers.CharField(max_length=500)
+    location = serializers.CharField(max_length=30)
 
 
 

@@ -89,7 +89,7 @@ class SignUp(CustomView):
             if self.auth_login({'username': query['username'], 'password': query['password']}):
                 print 'login check'
                 authuser = AuthUser.objects.get(username=query['username'])
-                return self.send_response(1, {'session':get_session_id(request), 'completed':True, 'id':authuser.id})
+                return self.send_response(1, {'session':get_session_id(request), 'completed':True, 'id':authuser.id, 'usertype':authuser.usertype})
         return self.send_response(0, {'data': serializer.errors})
 
 
@@ -129,7 +129,7 @@ class Login(CustomView):
                 if self.auth_login({'username': query['username'], 'password': query['password']}):
                     user = AuthUser.objects.get(username=query['username'])
                     print 'login check'
-                    return self.send_response(1, {'session_id':get_session_id(request), 'completed':True, 'id':user.id})
+                    return self.send_response(1, {'session_id':get_session_id(request), 'completed':True, 'id':user.id,'usertype':user.usertype})
                 else:
                     return self.send_response(0, {'error':"There is an error it seems!"})
 
@@ -144,15 +144,16 @@ class Login(CustomView):
                     if user.phonenumber:
                         completed = True
                         pass
-                    return self.send_response(1, {'session_id':get_session_id(request), 'completed':completed, 'id':user.id})               
+                    return self.send_response(1, {'session_id':get_session_id(request), 'completed':completed, 'id':user.id,'usertype':user.usertype})               
             except AuthUser.DoesNotExist:
                 user = AuthUser()
                 user.username = request.data['username']
                 user.fb_id = request.data['fb_id']
+                user.usertype = "user"
                 user.save() 
                 authuser = AuthUser.objects.get(fb_id=request.data['fb_id'])
                 if self.auth_login({'fb_id': request.data['fb_id']}):
-                    return self.send_response(1, {'session_id': get_session_id(request), 'completed':False, 'id':authuser.id})               
+                    return self.send_response(1, {'session_id': get_session_id(request), 'completed':False, 'id':authuser.id,'usertype':authuser.usertype})               
         return self.send_response(0, {'error':"There is an error it seems!"})
 
 

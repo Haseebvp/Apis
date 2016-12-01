@@ -26,6 +26,7 @@ SECRET_KEY = 'vcxg5+g1rk=)kq!h-p$wm0nt+spw@vhf(ci-q-v*03&c@%z=mj'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# SESSION_COOKIE_NAME = 'SESSION_EZY'
 
 
 # Application definition
@@ -76,7 +77,11 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
-    )
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.BasicAuthentication',
+       'rest_framework.authentication.SessionAuthentication',
+    ),
     
 }
 
